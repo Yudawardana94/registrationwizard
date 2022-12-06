@@ -3,18 +3,11 @@
   height: 100vh;
   margin: 0px auto;
   padding: 1rem;
-  /* background-color: antiquewhite; */
-  /* flex: 1; */
-  /* display: flex;
-  flex-direction: column; */
-  /* justify-content: flex-start; */
-  overflow: scroll;
-  /* position: absolute; */
+  background-color: antiquewhite;
 }
 
 .content {
   position: relative;
-  overflow-y: scroll;
   overflow-x: hidden;
 }
 
@@ -117,6 +110,25 @@
   margin-left: 0.5rem;
   color: crimson;
 }
+
+.imageModalZoom {
+  width: 50vw;
+  max-height: 40vh;
+  border-radius: 6px;
+}
+.imageModalZoomWrapper {
+  width: 50vw;
+  max-height: 50vh;
+  margin: 0px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  object-fit: cover;
+  /* background-color: tomato; */
+  overflow: hidden;
+}
+
 @media (min-width: 480px) {
   .container {
     width: 390px;

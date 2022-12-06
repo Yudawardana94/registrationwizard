@@ -147,22 +147,25 @@ function Image() {
           Berikutnya
         </Button>
       </div>
-      {/* <Modal
+      <Modal
         title="Basic Modal"
         open={isModalOpen}
+        onOk={() => setIsModalOpen(false)}
+        onCancel={() => setIsModalOpen(false)}
+        width={"60vw"}
       >
-        <div>
+        <div className={styles.imageModalZoomWrapper}>
           <img
             src={imageUrl}
             alt="avatar"
-            className={styles.uploadedImage}
+            className={styles.imageModalZoom}
             style={{
               transform: `scale(${100 + zoomVal}%)`,
             }}
           />
-          <Slider defaultValue={0} onChange={onSliderChange} />
         </div>
-      </Modal> */}
+        <Slider defaultValue={0} onChange={onSliderChange} />
+      </Modal>
     </div>
   );
 }
