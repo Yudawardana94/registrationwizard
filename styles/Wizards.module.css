@@ -89,6 +89,21 @@
 .imageUploadWrapper {
   margin: 1rem 0;
 }
+.uploadBlock {
+  width: 100%;
+  background-color: #eae6e3;
+  border-radius: 4px;
+  border: 1.5px dashed #484848;
+  margin: 8px auto;
+}
+
+.innerBlock {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
 
 .deletePhotoWrapper {
   display: inline-block;

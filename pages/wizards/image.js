@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
@@ -7,12 +7,6 @@ import { Button, Upload, Row, Col, Slider, Modal } from "antd";
 import { DeleteTwoTone } from "@ant-design/icons";
 
 import styles from "../../styles/Wizards.module.css";
-
-const getBase64 = (img, callback) => {
-  const reader = new FileReader();
-  reader.addEventListener("load", () => callback(reader.result));
-  reader.readAsDataURL(img);
-};
 
 function Image() {
   const navigate = useRouter();
@@ -24,7 +18,7 @@ function Image() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [zoomVal, setZoomVal] = useState(0);
 
-  const providedData = ["No. Polisi", "Nama Tertanggung", "No. Polis"];
+  const hiddenFileInput = useRef(null);
 
   useEffect(() => {
     setUserDataLocal({
@@ -42,42 +36,43 @@ function Image() {
     navigate.push(`/wizards/${screen}`);
   };
   const onClaimButtonClicked = () => {
-    // Condition to handle if photo is not uploaded yet
     if (!imageUrl) return false;
     onNavigateToScreen("summary");
   };
 
   const handleChange = (info) => {
-    if (info.file.status === "uploading") {
-      setLoading(true);
-      return;
-    }
-    if (info.file.status === "done") {
-      getBase64(info.file.originFileObj, (url) => {
-        setLoading(false);
-        setImageUrl(url);
-      });
-    }
-  };
-
-  const showModal = () => {
-    setIsModalOpen(true);
+    let files = info.target.files;
+    let reader = new FileReader();
+    reader.onload = (r) => {
+      let url = r.target.result;
+      setLoading(false);
+      setImageUrl(url);
+    };
+    reader.readAsDataURL(files[0]);
   };
 
   const onSliderChange = (val) => setZoomVal(val);
 
-  const uploadButton = (
-    <div>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div
-        style={{
-          marginTop: 8,
-        }}
-      >
-        Upload
+  const handleUpload = () => {
+    hiddenFileInput.current.click();
+    console.log("pencet disini");
+  };
+
+  const UploadBlock = () => (
+    <div onClick={handleUpload} className={styles.uploadBlock}>
+      <div className={styles.innerBlock}>
+        {loading ? <LoadingOutlined /> : <PlusOutlined />}
+        <div
+          style={{
+            marginTop: 8,
+          }}
+        >
+          Upload
+        </div>
       </div>
     </div>
   );
+
   return (
     <div className={styles.container}>
       <div className={styles.content}>
@@ -112,15 +107,15 @@ function Image() {
                   />
                 </div>
               ) : (
-                <Upload
-                  name="avatar"
-                  listType="picture-card"
-                  className="avatar-uploaders"
-                  showUploadList={false}
-                  onChange={handleChange}
-                >
-                  {uploadButton}
-                </Upload>
+                <>
+                  <UploadBlock />
+                  <input
+                    type="file"
+                    onChange={handleChange}
+                    ref={hiddenFileInput}
+                    style={{ display: "none" }}
+                  />
+                </>
               )}
               <p className={styles.bottomNoteText}>
                 * Data pada KTP harus terlihat jelas.
