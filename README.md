@@ -15,4 +15,4 @@ yarn dev
 
 if you want to open the deployed version, use this link :
 
-Link : http://registrationwizard.vercel.app
+Link : https://registrationwizard.vercel.app
