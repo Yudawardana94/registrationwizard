@@ -1,19 +1,25 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Upload, Row, Col, Slider, Modal } from "antd";
-import { DeleteTwoTone } from "@ant-design/icons";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  LoadingOutlined,
+  PlusOutlined,
+  DeleteTwoTone,
+  LeftOutlined,
+} from "@ant-design/icons";
+import { Button, Row, Col, Slider, Modal } from "antd";
 
+import { saveImage } from "../../actions";
 import styles from "../../styles/Wizards.module.css";
 
 function Image() {
   const navigate = useRouter();
-  const { userData } = useSelector((state) => state);
+  const dispatch = useDispatch();
+  const { userData, imageUpload } = useSelector((state) => state);
 
   const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState();
+  const [imageUrl, setImageUrl] = useState(imageUpload);
   const [userDataLocal, setUserDataLocal] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [zoomVal, setZoomVal] = useState(0);
@@ -21,14 +27,17 @@ function Image() {
   const hiddenFileInput = useRef(null);
 
   useEffect(() => {
+    if (!userData) return navigate.push(`/`);
     setUserDataLocal({
       "No. Polisi": userData.licence,
       "Nama Tertanggung": userData.name,
       "No. Polis": userData.polisId,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onNavigateToScreen = (screen) => {
+    dispatch(saveImage(imageUrl));
     if (screen === "back") {
       navigate.back();
       return;
@@ -53,10 +62,7 @@ function Image() {
 
   const onSliderChange = (val) => setZoomVal(val);
 
-  const handleUpload = () => {
-    hiddenFileInput.current.click();
-    console.log("pencet disini");
-  };
+  const handleUpload = () => hiddenFileInput.current.click();
 
   const UploadBlock = () => (
     <div onClick={handleUpload} className={styles.uploadBlock}>
@@ -77,7 +83,14 @@ function Image() {
     <div className={styles.container}>
       <div className={styles.content}>
         <div>
-          <button onClick={() => onNavigateToScreen("back")}>back</button>
+          {/* <Link href={"/wizards/form"}>Back</Link> */}
+          <div
+            className={styles.backButton}
+            onClick={() => onNavigateToScreen("back")}
+          >
+            <LeftOutlined />
+            <p>Back</p>
+          </div>
           <div className={styles.process}>
             <p>Unggah Foto</p>
           </div>
@@ -134,6 +147,7 @@ function Image() {
         </div>
       </div>
       <div>
+        {/* <Link href={"/wizards/summary"}> */}
         <Button
           type="primary"
           onClick={onClaimButtonClicked}
@@ -141,6 +155,7 @@ function Image() {
         >
           Berikutnya
         </Button>
+        {/* </Link> */}
       </div>
       <Modal
         title="Basic Modal"

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { Button } from "antd";
 
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -39,7 +40,9 @@ export default function Home() {
             Click &ldquo;Claim&ldquo; button below to begin claim your
             compensation.
           </p>
-          <button onClick={onBeginClaim}>Claim</button>
+          <Button onClick={onBeginClaim} className={styles.button}>
+            Claim
+          </Button>
         </div>
       </main>
     </div>

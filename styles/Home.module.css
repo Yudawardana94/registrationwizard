@@ -110,6 +110,10 @@
   margin-left: 0.5rem;
 }
 
+.button {
+  width: 20vw;
+}
+
 @media (min-width: 481) {
   .main {
     min-height: 100vh;
